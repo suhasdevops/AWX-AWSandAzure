@@ -1,0 +1,19 @@
+#suhasdevops:)
+#
+---
+- name: Terminate AWS instances
+  hosts: localhost
+  vars:
+    instance_ids:
+      - 'i-04f676a4a'
+     # - 'i-xxxxxx'
+     # - 'i-xxxxxx'
+    region: us-east-1
+  tasks:
+    - name: Terminating
+      ec2:
+        state: 'absent'
+        instance_ids: '{{ instance_ids }}'
+        region: '{{ region }}'
+        aws_access_key: ####################
+        aws_secret_key: ########################################
