@@ -17,8 +17,8 @@ Username: admin
 Password: password
 
 Useful docker commands:
-$ docker ps
-$ docker exec -it <container id> /bin/bash
+- $ docker ps
+- $ docker exec -it container_id /bin/bash
 
 Check Installed:
 - Ansible
