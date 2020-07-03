@@ -1,0 +1,62 @@
+---
+- name: Create Azure VM
+  hosts: localhost
+  connection: local
+  tasks:
+  - name: Create resource group
+    azure_rm_resourcegroup:
+      name: sjkResourceGroup
+      location: eastus
+  - name: Create virtual network
+    azure_rm_virtualnetwork:
+      resource_group: sjkResourceGroup
+      name: sjkVnet
+      address_prefixes: "10.0.0.0/16"
+  - name: Add subnet
+    azure_rm_subnet:
+      resource_group: sjkResourceGroup
+      name: sjkSubnet
+      address_prefix: "10.0.1.0/24"
+      virtual_network: sjkVnet
+  - name: Create public IP address
+    azure_rm_publicipaddress:
+      resource_group: sjkResourceGroup
+      allocation_method: Static
+      name: sjkPublicIP
+    register: output_ip_address
+  - name: Dump public IP for VM which will be created
+    debug:
+      msg: "The public IP is {{ output_ip_address.state.ip_address }}."
+  - name: Create Network Security Group that allows SSH
+    azure_rm_securitygroup:
+      resource_group: sjkResourceGroup
+      name: sjkNetworkSecurityGroup
+      rules:
+        - name: SSH
+          protocol: Tcp
+          destination_port_range: 22
+          access: Allow
+          priority: 1001
+          direction: Inbound
+  - name: Create virtual network interface card
+    azure_rm_networkinterface:
+      resource_group: sjkResourceGroup
+      name: sjkNIC
+      virtual_network: sjkVnet
+      subnet: sjkSubnet
+      public_ip_name: sjkPublicIP
+      security_group: sjkNetworkSecurityGroup
+  - name: Create VM
+    azure_rm_virtualmachine:
+      resource_group: sjkResourceGroup
+      name: sjkVM
+      vm_size: Standard_DS1_v2
+      network_interfaces: sjkNIC
+      admin_username: suhasdevops
+      admin_password: suhasdevops
+      image:
+        offer: CentOS
+        publisher: OpenLogic
+        sku: '7.5'
+        version: latest
+
