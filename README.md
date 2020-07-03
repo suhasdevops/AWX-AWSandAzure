@@ -28,7 +28,7 @@ Check Installed:
 - pip install boto
 
 ### Important:
-- create {{ projects }} under var/lib/awx/ in docker container.
+- create {{ projects }} under var/lib/awx/ in docker container awx_web.
 - uncomment {{ project_data_dir }} in /opt/awx/installer/inventory file in host machine and restart.
 - AWS authentication we have use AccessKeyID, SecretAccessKey of admin user.
 - And in Azure we have use SubscriptionID, ClientID, TenantID, ClientSecretKey for authentication. 
@@ -40,4 +40,4 @@ Check Installed:
 - create job template with default inventory and playbook yml file
 - and finally run the job.
 
-:):):)
+
